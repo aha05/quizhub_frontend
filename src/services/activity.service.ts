@@ -1,5 +1,11 @@
 import api from "./api"
 
+interface Answer {
+  questionId: number
+  selectedOptionIds: number[]
+}
+
+
 export interface History {
    id: number
    quizId: number
@@ -10,6 +16,8 @@ export interface History {
    quizCategory: string
    passed: boolean
    submittedAt: string 
+   timeTaken: string
+   answers: Answer[]
 }
 
 export interface Leaderboard {
@@ -41,8 +49,8 @@ export const getLeaderboard = async (): Promise<Leaderboard[]> => {
   return res.data
 }
 
-export const getHistoryById = async (id: number): Promise<History[]> => {
-  const res = await api.get<History[]>(`/quiz/quizResult/${id}`)
+export const getHistoryById = async (id: number): Promise<History> => {
+  const res = await api.get<History>(`/quiz/quizResult/${id}`)
   return res.data
 }
 

@@ -13,7 +13,6 @@ import {
   Menu,
   Search,
   Bell,
-  Settings,
   ChevronDown,
 } from "lucide-react"
 
@@ -23,11 +22,16 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+
+interface User {
+  id: number
+  name: string
+  email: string
+  role: string
+}
 
 const navigation = [
   { name: "Dashboard", path: "/admin", icon: LayoutDashboard },
@@ -39,8 +43,7 @@ const navigation = [
 export function DashboardLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const location = useLocation()
-  const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState<User>()
 
   useEffect(() => {
     const loadUser = async () => {
@@ -49,19 +52,12 @@ export function DashboardLayout() {
         setUser(userData)
       } catch (err) {
         console.error("Failed to load user", err)
-      } finally {
-        setLoading(false)
-      }
+      } 
     }
 
     loadUser()
   }, [])
 
-  const capitalizeName = (name: string) =>
-    name
-      .split(" ")
-      .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
-      .join(" ")
 
   const getInitials = (name: string) =>
     name

@@ -1,15 +1,18 @@
-"use client"
-
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Calendar, Trophy, Target, TrendingUp } from "lucide-react"
 
+type UserRole = "ADMIN" | "USER"
+type UserStatus = "ACTIVE" | "DISABLED"
+
 interface User {
-  id: string
+  id: number
   name: string
   email: string
-  role: "Admin" | "Manager" | "Regular"
+  role: UserRole
+  status: UserStatus
+  avatar?: string
   quizzesAttempted: number
   highestScore: number
 }

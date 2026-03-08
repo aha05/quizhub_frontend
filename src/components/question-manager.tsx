@@ -35,7 +35,7 @@ interface Option {
 interface Question {
   id: number
   content: string
-  type: "single" | "multiple"
+  type: "SINGLE" | "MULTIPLE"
   options: Option[]
 }
 
@@ -137,7 +137,7 @@ export function QuestionManager() {
                       <p className="font-medium">{question.content}</p>
                       <div className="flex gap-2 mt-1">
                         <Badge variant="outline" className="text-xs">
-                          {question.type === "single"
+                          {question.type === "SINGLE"
                             ? "Single Choice"
                             : "Multiple Choice"}
                         </Badge>

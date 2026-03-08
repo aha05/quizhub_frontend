@@ -43,7 +43,6 @@ export default function QuestionPage() {
   const { quizId } = useParams<{ quizId: string }>()
   const [quiz, setQuiz] = useState<Quiz | null>(null)
   const [questions, setQuestions] = useState<Question[]>([])
-
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [answers, setAnswers] = useState<(number | null)[]>(Array(questions.length).fill(null))
   const [timeRemaining, setTimeRemaining] = useState(600) // 10 minutes in seconds
@@ -66,9 +65,7 @@ export default function QuestionPage() {
           setTimeRemaining(quizData.timeLimit * 60)
         } catch (err) {
           console.error("Failed to load quiz", err)
-        } finally {
-          setLoading(false)
-        }
+        } 
       }
   
       loadQuiz()
@@ -278,7 +275,7 @@ export default function QuestionPage() {
           score={calculateScore()}
           totalQuestions={questions.length}
           timeTaken={timeTaken}
-          passPercentage={quiz.passPercentage}
+          passPercentage={quiz?.passPercentage ?? 0}
           onRetry={handleRetry}
         />
       )}

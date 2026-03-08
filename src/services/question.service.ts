@@ -17,12 +17,14 @@ export interface Question {
     id: number
     content: string
     type: Type
-    options: Option
+    options: Option[]
 }
 
 export interface QuestionPayload {
     content: string
-    options: Option
+    type: Type
+    options?: Option[]
+    
 }
 
 export const createQuestion = async (
@@ -65,7 +67,7 @@ export const getOption = async (quizId: number): Promise<Option[]> => {
 export const updateOption = async (
   questionId: number,
   optionId: number,
-  payload: QuestionPayload
+  payload: OptionPayload
 ) => {
   const res = await api.put(`/question/${questionId}/option/${optionId}`, payload)
   return res.data

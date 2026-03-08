@@ -2,6 +2,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 
 export type Type = "SINGLE" | "MULTIPLE"
+export type Status = "ACTIVE" | "INACTIVE"
 
 interface Option {
   id: number
@@ -41,7 +42,7 @@ export function QuizQuestion({
       <RadioGroup
         className="space-y-3"
       >
-        {question?.options?.map((option, index) => {
+        {question?.options?.map((option:any, index:any) => {
           const isSelected = selectedOptionIds.includes(option?.id)
           const isCorrect = option?.correct
 

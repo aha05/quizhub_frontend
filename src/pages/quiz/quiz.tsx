@@ -2,17 +2,30 @@
 
 import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
-import { Button } from "@/components/ui/Button"
+import { Button } from "@/components/ui/button"
 import { Brain, Clock, Target } from "lucide-react"
 import { getQuizById } from "@/services/quiz.service"
 
+
+interface Category {
+  id: number  
+  name: string
+  description?: string
+}
+
+type Difficulty = "EASY" | "MEDIUM" | "HARD"
+type Status = "ACTIVE" | "INACTIVE"
+
 interface Quiz {
-  id: string
-  title: string
-  description: string
-  questions: number
-  timeLimit: number
-  passPercentage: number
+    id: number 
+    title: string 
+    description: string 
+    category: Category 
+    difficulty: Difficulty 
+    status: Status
+    questions: number
+    timeLimit: number
+    passPercentage: number
 }
 
 export default function QuizPage() {

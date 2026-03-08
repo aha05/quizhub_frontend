@@ -31,9 +31,7 @@ export function QuizHistory() {
           setHistory(historyData)
         } catch (err) {
           console.error("Failed to load quiz history", err)
-        } finally {
-          setLoading(false)
-        }
+        } 
       }
   
       loadQuiz()
@@ -56,7 +54,7 @@ export function QuizHistory() {
           >
             <div className="flex items-center justify-between mb-4">
               <Badge
-                variant={item.passed  ? "success" : "destructive"}
+                variant={item.passed  ? "default" : "destructive"}
                 className="px-2 py-0.5"
               >
                 {item.passed  ? <CheckCircle className="h-4 w-4 mr-1" /> : <XCircle className="h-4 w-4 mr-1" />}

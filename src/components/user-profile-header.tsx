@@ -1,5 +1,4 @@
-"use client"
-
+import * as React from "react"
 import { useState, useEffect } from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -39,7 +38,7 @@ export interface User {
 
 export function UserProfileHeader() {
   const [userActivity, setUserActivity] = useState<UserActivity | null>(null)
-  const [user, setUser] = useState<User | null>(null)
+  const [user, setUser] = useState<User>()
   const [loading, setLoading] = useState(true)
   const [editOpen, setEditOpen] = useState(false)
 
@@ -79,7 +78,7 @@ export function UserProfileHeader() {
 
   const badgeConfig: Record<
     string,
-    { label: string; icon?: JSX.Element }
+    { label: string; icon?: React.ReactNode }
   > = {
     FIRST_QUIZ: { label: "First Quiz", icon: <Trophy className="h-3 w-3" /> },
     HIGH_SCORER: { label: "High Scorer", icon: <Trophy className="h-3 w-3" /> },
@@ -97,15 +96,14 @@ export function UserProfileHeader() {
   return (
     <>
       {/* Edit Profile Modal */}
-      <EditModal
-        isOpen={editOpen}
-        onClose={() => setEditOpen(false)}
-        initialData={user}
-        onSave={(updatedData) => {
-          setUserActivity(updatedData)
-          setEditOpen(false)
-        }}
-      />
+      {user && (
+        <EditModal
+              isOpen={editOpen}
+              onClose={() => setEditOpen(false)}
+              initialData={user}
+            />
+      )}
+      
 
       <Card className="mb-8 border-border/50 bg-card/50 backdrop-blur p-6">
         <div className="flex flex-wrap items-center justify-between gap-4">

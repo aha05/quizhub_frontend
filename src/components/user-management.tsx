@@ -34,7 +34,6 @@ import {
   getUser, getUserStats, updateUserStatus
 } from "@/services/user.service"
 
-/* ---------------- TYPES ---------------- */
 
 type UserRole = "ADMIN" | "USER"
 type UserStatus = "ACTIVE" | "DISABLED"

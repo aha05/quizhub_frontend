@@ -23,9 +23,7 @@ export function LeaderboardTable() {
             setLeaderboard(leaderboardData)
           } catch (err) {
             console.error("Failed to load quiz", err)
-          } finally {
-            setLoading(false)
-          }
+          } 
         }
     
         loadLeaderboard()

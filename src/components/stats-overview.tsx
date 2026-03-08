@@ -1,7 +1,5 @@
-"use client"
-
 import { useState, useEffect } from "react"
-import { Card } from "@/components/ui/Card"
+import { Card } from "@/components/ui/card"
 import { Trophy, Target, CheckCircle2, TrendingUp } from "lucide-react"
 import { Progress } from "@/components/ui/progress"
 import { getUserActivity } from "@/services/activity.service"

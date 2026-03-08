@@ -77,22 +77,22 @@ export default function AuthPage() {
           navigate("/admin")
 
         } catch (error) {
-          toast.error(error?.message || "Register failed")
-          console.error("Login failed", error.message)
+          toast.error("Register failed")
+          console.error("Login failed")
       }
     }
 
     if(mode == "register"){
       try {
-          const data = await register({
+           await register({
             email: email,
             password: password,
             name: fullName,
           })
           toast.success("User registered!")
         } catch (error) {
-          toast.error(error?.message||"Register failed")
-          console.error("Register failed", error?.message)
+          toast.error("Register Failed!")
+          console.error("Register Failed!")
       }
     }
     setIsLoading(false)

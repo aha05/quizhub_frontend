@@ -1,7 +1,4 @@
-"use client"
-
 import type React from "react"
-
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import toast from "react-hot-toast"
@@ -77,22 +74,22 @@ export default function AuthPage() {
           navigate("/")
 
         } catch (error) {
-          toast.error(error?.message || "Register failed")
-          console.error("Login failed", error.message)
+          toast.error("Register Failed!")
+          console.error("Login Failed!")
       }
     }
 
     if(mode == "register"){
       try {
-          const data = await register({
+          await register({
             email: email,
             password: password,
             name: fullName,
           })
           toast.success("User registered!")
         } catch (error) {
-          toast.error(error?.message||"Register failed")
-          console.error("Register failed", error?.message)
+          toast.error("Register Failed!")
+          console.error("Register Failed!")
       }
     }
     setIsLoading(false)

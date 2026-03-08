@@ -1,6 +1,3 @@
-"use client"
-
-import * as React from "react"
 import { useEffect, useState } from "react"
 
 import { Button } from "@/components/ui/button"
@@ -29,9 +26,8 @@ import {
 
 /* ===================== TYPES ===================== */
 
-interface Option {
-  id?: number          // backend id (exists only for edit)
-  tempId: number       // frontend-only id
+interface Option {     
+  id: number      
   text: string
   correct: boolean
 }
@@ -50,8 +46,6 @@ interface QuestionDialogProps {
   onOpenChange: (open: boolean) => void
   onSave: () => void
 }
-
-/* ===================== COMPONENT ===================== */
 
 export function QuestionDialog({
   open,
@@ -86,8 +80,8 @@ export function QuestionDialog({
     setQuestionText("")
     setQuestionType("SINGLE")
     setOptions([
-      { tempId: 1, text: "", correct: false },
-      { tempId: 2, text: "", correct: false },
+      { id: 1, text: "", correct: false },
+      { id: 2, text: "", correct: false },
     ])
   }
 
@@ -97,7 +91,7 @@ export function QuestionDialog({
     setOptions(prev => [
       ...prev,
       {
-        tempId: Math.max(...prev.map(o => o.tempId)) + 1,
+        id: Math.max(...prev.map(o => o.id)) + 1,
         text: "",
         correct: false,
       },
@@ -107,28 +101,28 @@ export function QuestionDialog({
   const removeOption = async (tempId: number) => {
     if (options.length <= 2) return
 
-    const option = options.find(o => o.tempId === tempId)
+    const option = options.find(o => o.id === tempId)
 
     // delete from backend if already exists
     if (option?.id) {
-      await deleteOption(option.id)
+      await deleteOption(question?.id ?? 0, option.id)
     }
 
-    setOptions(prev => prev.filter(o => o.tempId !== tempId))
+    setOptions(prev => prev.filter(o => o.id !== tempId))
   }
 
   const updateOptionText = (tempId: number, text: string) => {
     setOptions(prev =>
-      prev.map(o => (o.tempId === tempId ? { ...o, text } : o))
+      prev.map(o => (o.id === tempId ? { ...o, text } : o))
     )
   }
 
   const toggleCorrect = (tempId: number) => {
     setOptions(prev =>
       questionType === "SINGLE"
-        ? prev.map(o => ({ ...o, correct: o.tempId === tempId }))
+        ? prev.map(o => ({ ...o, correct: o.id === tempId }))
         : prev.map(o =>
-            o.tempId === tempId
+            o.id === tempId
               ? { ...o, correct: !o.correct }
               : o
           )
@@ -249,24 +243,24 @@ export function QuestionDialog({
             {/* SINGLE */}
             {questionType === "SINGLE" && (
               <RadioGroup
-                value={options.find(o => o.correct)?.tempId.toString()}
+                value={options.find(o => o.correct)?.id.toString()}
                 onValueChange={v => toggleCorrect(Number(v))}
                 className="space-y-2"
               >
                 {options.map((o, i) => (
-                  <div key={o.tempId} className="flex items-center gap-2">
-                    <RadioGroupItem value={o.tempId.toString()} />
+                  <div key={o.id} className="flex items-center gap-2">
+                    <RadioGroupItem value={o.id.toString()} />
                     <Input
                       value={o.text}
                       onChange={e =>
-                        updateOptionText(o.tempId, e.target.value)
+                        updateOptionText(o.id, e.target.value)
                       }
                       placeholder={`Option ${String.fromCharCode(65 + i)}`}
                     />
                     <Button
                       size="icon"
                       variant="ghost"
-                      onClick={() => removeOption(o.tempId)}
+                      onClick={() => removeOption(o.id)}
                       disabled={options.length <= 2}
                     >
                       <X className="h-4 w-4" />
@@ -279,22 +273,22 @@ export function QuestionDialog({
             {/* MULTIPLE */}
             {questionType === "MULTIPLE" &&
               options.map((o, i) => (
-                <div key={o.tempId} className="flex items-center gap-2">
+                <div key={o.id} className="flex items-center gap-2">
                   <Checkbox
                     checked={o.correct}
-                    onCheckedChange={() => toggleCorrect(o.tempId)}
+                    onCheckedChange={() => toggleCorrect(o.id)}
                   />
                   <Input
                     value={o.text}
                     onChange={e =>
-                      updateOptionText(o.tempId, e.target.value)
+                      updateOptionText(o.id, e.target.value)
                     }
                     placeholder={`Option ${String.fromCharCode(65 + i)}`}
                   />
                   <Button
                     size="icon"
                     variant="ghost"
-                    onClick={() => removeOption(o.tempId)}
+                    onClick={() => removeOption(o.id)}
                     disabled={options.length <= 2}
                   >
                     <X className="h-4 w-4" />

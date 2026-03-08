@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react"
-import { Button } from "@/components/ui/button"
+import { useState } from "react"
+import { Button }  from "@/components/ui/button"
 import { createCategory } from "@/services/quiz.service"
 import toast from "react-hot-toast"
 
@@ -16,27 +16,20 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 
-interface Category {
-  id: number
-  name: string
-  description: string
-}
 
 interface CategoryDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  category: Category | null
 }
 
 interface CategoryFormData {
   name: string
-  description: string
+  description?: string
 }
 
 export function AddCategoryDialog({
   open,
   onOpenChange,
-  category,
 }: CategoryDialogProps) {
   const [formData, setFormData] = useState<CategoryFormData>({
     name: "",
@@ -45,19 +38,6 @@ export function AddCategoryDialog({
 
   const [loading, setLoading] = useState(false)
 
-  useEffect(() => {
-    if (category) {
-      setFormData({
-        name: category.name,
-        description: category.description,
-      })
-    } else {
-      setFormData({
-        name: "",
-        description: "",
-      })
-    }
-  }, [category])
 
   const handleSubmit = async () => {
     if (!formData.name.trim()) {
@@ -70,7 +50,7 @@ export function AddCategoryDialog({
 
       await createCategory({
         name: formData.name,
-        description: formData.description,
+        description: formData?.description ?? "",
       })
 
       toast.success("Category added successfully")
@@ -90,7 +70,7 @@ export function AddCategoryDialog({
       <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle>
-            {category ? "Edit Category" : "Create New Category"}
+            {"Create New Category"}
           </DialogTitle>
           <DialogDescription>
             Fill in the category details below

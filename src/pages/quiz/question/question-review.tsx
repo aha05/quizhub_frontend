@@ -1,5 +1,3 @@
-"use client"
-
 import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import { QuizQuestion } from "@/components/review-quiz"
@@ -10,12 +8,6 @@ import { getHistoryById} from "@/services/activity.service"
 
 
 export type Type = "SINGLE" | "MULTIPLE"
-
-interface Quiz {
-  id: number
-  timeLimit: number // minutes
-  passPercentage: number
-}
 
 interface Option {
   id: number
@@ -30,37 +22,28 @@ interface Question {
   options: Option[]
 }
 
-type HistoryItem = {
+interface Answer {
+  questionId: number
+  selectedOptionIds: number[]
+}
+
+interface HistoryItem  {
   id: number
-  quizId: number
-  quizTitle: string
-  quizCategory: string
-  scorePercentage: number
-  correctAnswers: number
-  totalQuestions: number
-  submittedAt: string
-  passed: boolean
+   quizId: number
+   quizTitle: string
+   totalQuestions: number
+   correctAnswers: number
+   scorePercentage: number
+   quizCategory: string
+   passed: boolean
+   submittedAt: string 
+   timeTaken: string
+   answers: Answer[]
 }
 
-interface QuizHistory {
-  timeTaken: number
-  answers: {
-    questionId: number
-    selectedOptionIds: number[]
-  }[]
-}
-
-interface SubmitAnswerPayload {
-  timeTaken: number
-  answers: {
-    questionId: number
-    selectedOptionIds: number[]
-  }[]
-}
 
 export default function ReviewQuestionPage() {
   const { quizId, id } = useParams<{ quizId: string, id: string }>()
-  const [quiz, setQuiz] = useState<Quiz | null>(null)
   const [questions, setQuestions] = useState<Question[]>([])
   const [quizHistory, setQuizHistory] = useState<HistoryItem>()
   const [currentQuestion, setCurrentQuestion] = useState(0)
@@ -79,15 +62,12 @@ export default function ReviewQuestionPage() {
             getHistoryById(Number(id))
           ])
           setQuestions(questionData)
-          setQuiz(quizData)
           setQuizHistory(quizHistoryData)
           setAnswers(new Array(questionData.length).fill(null))
           setTimeRemaining(quizData.timeLimit * 60)
         } catch (err) {
           console.error("Failed to load quiz", err)
-        } finally {
-          setLoading(false)
-        }
+        } 
       }
   
       loadQuiz()
@@ -120,7 +100,6 @@ useEffect(() => {
     }
   }
 
-  const answeredCount = answers.filter((a) => a !== null).length
   const question = questions[currentQuestion]
   const selectedOptionIds = answerMap.get(question?.id) ?? []
   
@@ -140,7 +119,7 @@ useEffect(() => {
             <div className="flex items-center gap-2">
               <Clock className={`w-5 h-5 text-primary`} />
               <span className={`text-xl font-mono font-semibold text-foreground`}>
-                {formatTime(quizHistory?.timeTaken)}
+                {formatTime(Number(quizHistory?.timeTaken))}
               </span>
             </div>
             <div className="flex items-center gap-2">
@@ -156,13 +135,13 @@ useEffect(() => {
             <div className="flex justify-between items-center mb-2">
               <span className="text-sm text-muted-foreground">Progress</span>
               <span className="text-sm text-foreground font-medium">
-                {Math.round((quizHistory?.correctAnswers / questions.length) * 100)}%
+                {Math.round(((quizHistory?.correctAnswers ?? 0) / questions.length) * 100)}%
               </span>
             </div>
             <div className="w-full h-2 bg-secondary rounded-full overflow-hidden">
               <div
                 className="h-full bg-gradient-to-r from-primary to-accent transition-all duration-300 ease-out"
-                style={{ width: `${(quizHistory?.correctAnswers / questions.length) * 100}%` }}
+                style={{ width: `${((quizHistory?.correctAnswers ?? 0) / questions.length) * 100}%` }}
               />
             </div>
           </div>

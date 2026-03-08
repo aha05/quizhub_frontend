@@ -1,5 +1,3 @@
-"use client"
-
 import { useEffect, useState } from "react"
 import toast from "react-hot-toast"
 import {
@@ -15,15 +13,24 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { updateProfile } from "@/services/user.service"
 
+export interface User {
+    id: number
+    name: string
+    email: string
+    role: string
+    status: string
+}
+
 interface EditModalProps {
   isOpen: boolean
   onClose: () => void
+  initialData: User
 }
 
 export interface UserPayload {
   name: string
   email: string
-  password?: string
+  password: string
 }
 
 export function EditModal({
@@ -77,7 +84,7 @@ export function EditModal({
       const payload: UserPayload = {
         name,
         email,
-        ...(password && { password }),
+        password,
       }
 
       await updateProfile(payload)

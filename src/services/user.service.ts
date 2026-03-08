@@ -22,7 +22,7 @@ export interface UserStats {
     userId: number
     name: string
     quizzesAttempted: number
-    highestScorePercentage: double
+    highestScorePercentage: number
 }
 
 export const getCurrentUser = async (): Promise<User> => {

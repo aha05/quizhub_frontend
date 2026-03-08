@@ -26,6 +26,7 @@ import { updateQuiz, getCategory } from "@/services/quiz.service"
 type Difficulty = "EASY" | "MEDIUM" | "HARD"
 type Status = "ACTIVE" | "INACTIVE"
 
+
 interface Category {
   id: number
   name: string

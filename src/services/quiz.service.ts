@@ -12,10 +12,11 @@ export interface Category {
 }
 
 export type Difficulty = "EASY" | "MEDIUM" | "HARD"
-export type Status = "ACTIVE" | "InACTIVE"
+export type Status = "ACTIVE" | "INACTIVE"
+
 
 export interface Quiz {
-    id: string 
+    id: number 
     title: string 
     description: string 
     category: Category 
@@ -47,14 +48,13 @@ export interface UpdateQuizPayload {
 }
 
 interface SubmitAnswer {
-  userId: number
+  userId?: number
   timeTaken: number
-  answers: [
+  answers: 
     {
       questionId: number
       selectedOptionIds: number[]
-    }
-  ]
+    }[]
 }
 
 
@@ -69,8 +69,8 @@ export const getQuiz = async (): Promise<Quiz[]> => {
   return res.data
 }
 
-export const getQuizById = async (quizId: number): Promise<Quiz[]> => {
-  const res = await api.get<Quiz[]>(`/quiz/${quizId}`)
+export const getQuizById = async (quizId: number): Promise<Quiz> => {
+  const res = await api.get<Quiz>(`/quiz/${quizId}`)
   return res.data
 }
 

@@ -16,14 +16,14 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Plus, Search, MoreHorizontal, Pencil, Trash2, Eye, FileQuestion } from "lucide-react"
+import { Plus, Search, MoreHorizontal, Pencil, Trash2, FileQuestion } from "lucide-react"
 
 import { AddQuizDialog } from "@/components/add-quiz-dialog"
 import { AddCategoryDialog } from "@/components/add-category-dialog"
 import { EditQuizDialog } from "@/components/edit-quiz-dialog"
 import { DeleteQuizDialog } from "@/components/delete-quiz-dialog"
 import { getQuiz, getCategory, deleteQuiz } from "@/services/quiz.service"
-import axios from "axios"
+
 
 type Difficulty = "EASY" | "MEDIUM" | "HARD"
 type Status = "ACTIVE" | "INACTIVE"
@@ -31,15 +31,19 @@ type Status = "ACTIVE" | "INACTIVE"
 interface Category {
   id: number
   name: string
+  description?: string
 }
 
 interface Quiz {
-  id: string
+  id: number
   title: string
+  description: string
   category: Category
   difficulty: Difficulty
   questions: number
   status: Status
+  timeLimit: number
+  passPercentage: number
 }
 
 export function QuizManagement() {
@@ -89,27 +93,13 @@ export function QuizManagement() {
   const startIndex = (currentPage - 1) * itemsPerPage
   const paginatedQuizzes = filteredQuizzes.slice(startIndex, startIndex + itemsPerPage)
 
-  // CRUD handlers
-  const handleAddQuiz = (quiz: Quiz) => {
-    setQuizzes([quiz, ...quizzes])
-    setAddDialogOpen(false)
-  }
-
-  const handleAddCategory = () => setAddCategoryDialogOpen(false)
-
-  const handleEditQuiz = (updatedQuiz: Quiz) => {
-    setQuizzes(quizzes.map((q) => (q.id === updatedQuiz.id ? updatedQuiz : q)))
-    setEditDialogOpen(false)
-    setSelectedQuiz(null)
-  }
-
   const handleDeleteQuiz = async () => {
     if (!selectedQuiz) return
     try{
       await deleteQuiz(selectedQuiz.id)
       toast.success("Delete succeeded!")
     } catch(error){
-        toast.error(error.message)
+        toast.error("Delete Failed!")
     }
     setQuizzes(quizzes.filter((q) => q.id !== selectedQuiz.id))
     setDeleteDialogOpen(false)
@@ -300,11 +290,11 @@ export function QuizManagement() {
       )}
 
       {/* Dialogs */}
-      <AddQuizDialog open={addDialogOpen} onOpenChange={setAddDialogOpen} onAdd={handleAddQuiz} />
-      <AddCategoryDialog open={addCategoryDialogOpen} onOpenChange={setAddCategoryDialogOpen} onAdd={handleAddCategory} />
+      <AddQuizDialog open={addDialogOpen} onOpenChange={setAddDialogOpen} />
+      <AddCategoryDialog open={addCategoryDialogOpen} onOpenChange={setAddCategoryDialogOpen} />
       {selectedQuiz && (
         <>
-          <EditQuizDialog open={editDialogOpen} onOpenChange={setEditDialogOpen} quiz={selectedQuiz} onEdit={handleEditQuiz} />
+          <EditQuizDialog open={editDialogOpen} onOpenChange={setEditDialogOpen} quiz={selectedQuiz} />
           <DeleteQuizDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen} quizTitle={selectedQuiz.title} onDelete={handleDeleteQuiz} />
         </>
       )}

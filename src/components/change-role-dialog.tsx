@@ -23,7 +23,7 @@ import toast from "react-hot-toast"
 import { updateUserRole } from "@/services/user.service"
 
 interface User {
-  id: string
+  id: number
   name: string
   email: string
   role: "ADMIN" | "USER"
@@ -33,14 +33,12 @@ interface ChangeRoleDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   user: User
-  onChangeRole: (newRole: "ADMIN" | "USER") => void
 }
 
 export function ChangeRoleDialog({
   open,
   onOpenChange,
   user,
-  onChangeRole,
 }: ChangeRoleDialogProps) {
   const [selectedRole, setSelectedRole] = useState<"ADMIN" | "USER">(user.role)
   const [loading, setLoading] = useState(false)

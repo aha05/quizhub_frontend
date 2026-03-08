@@ -5,7 +5,7 @@ import Quiz from "@/pages/admin/Quiz"
 import Question from "@/pages/admin/Question"
 import User from "@/pages/admin/User"
 import Report from "@/pages/admin/Report"
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Route } from "react-router-dom";
 
 export default function AdminRoutes() {
   return (

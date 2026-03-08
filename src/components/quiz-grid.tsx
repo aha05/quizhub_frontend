@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-import { Card } from "@/components/ui/Card"
-import { Button } from "@/components/ui/Button"
+import { Card } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import {
   Select,
@@ -27,6 +27,7 @@ import {
 import { getQuiz, getCategory } from "@/services/quiz.service"
 
 type Difficulty = "EASY" | "MEDIUM" | "HARD"
+type Status = "ACTIVE" | "INACTIVE"
 
 interface Category {
   id: number
@@ -34,12 +35,15 @@ interface Category {
 }
 
 interface Quiz {
-  id: string
-  title: string
-  description: string
-  questions: number
-  difficulty: Difficulty
-  category: Category
+    id: number 
+    title: string 
+    description: string 
+    category: Category 
+    difficulty: Difficulty 
+    status: Status
+    questions: number
+    timeLimit: number
+    passPercentage: number
 }
 
 const difficultyColors: Record<Difficulty, string> = {
