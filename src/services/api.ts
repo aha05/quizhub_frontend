@@ -20,49 +20,49 @@ api.interceptors.request.use(
 )
 
 //🔄 Auto refresh access token on 401
-// let isRefreshing = false
-// let queue: Array<(token: string) => void> = []
+let isRefreshing = false
+let queue: Array<(token: string) => void> = []
 
 
-// api.interceptors.response.use(
-//   (response) => response,
-//   async (error) => {
-//     const originalRequest = error.config as any
-//     const isAuthEndpoint = originalRequest.url?.includes("/auth/login") ||
-//                            originalRequest.url?.includes("/auth/register") ||
-//                            originalRequest.url?.includes("/auth/refresh")
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config as any
+    const isAuthEndpoint = originalRequest.url?.includes("/auth/login") ||
+                           originalRequest.url?.includes("/auth/register") ||
+                           originalRequest.url?.includes("/auth/refresh")
 
-//     if (error.response?.status === 401 && !originalRequest._retry && !isAuthEndpoint) {
-//       originalRequest._retry = true
+    if (error.response?.status === 401 && !originalRequest._retry && !isAuthEndpoint) {
+      originalRequest._retry = true
 
-//       if (isRefreshing) {
-//         return new Promise((resolve) => {
-//           queue.push((token: string) => {
-//             originalRequest.headers.Authorization = `Bearer ${token}`
-//             resolve(api(originalRequest))
-//           })
-//         })
-//       }
+      if (isRefreshing) {
+        return new Promise((resolve) => {
+          queue.push((token: string) => {
+            originalRequest.headers.Authorization = `Bearer ${token}`
+            resolve(api(originalRequest))
+          })
+        })
+      }
 
-//       isRefreshing = true
-//       try {
-//         const newToken = await refreshAccessToken()
-//         queue.forEach((cb) => cb(newToken))
-//         queue = []
+      isRefreshing = true
+      try {
+        const newToken = await refreshAccessToken()
+        queue.forEach((cb) => cb(newToken))
+        queue = []
 
-//         originalRequest.headers.Authorization = `Bearer ${newToken}`
-//         return api(originalRequest)
-//       } catch (err) {
-//         localStorage.removeItem("accessToken")
-//         window.location.href = "/login"
-//         return Promise.reject(err)
-//       } finally {
-//         isRefreshing = false
-//       }
-//     }
+        originalRequest.headers.Authorization = `Bearer ${newToken}`
+        return api(originalRequest)
+      } catch (err) {
+        localStorage.removeItem("accessToken")
+        window.location.href = "/login"
+        return Promise.reject(err)
+      } finally {
+        isRefreshing = false
+      }
+    }
 
-//     return Promise.reject(error)
-//   }
-// )
+    return Promise.reject(error)
+  }
+)
 
 export default api
